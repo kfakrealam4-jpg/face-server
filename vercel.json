@@ -1,0 +1,13 @@
+{
+  "functions": {
+    "api/compare.py": {
+      "runtime": "python3.9"
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/compare",
+      "dest": "/api/compare.py"
+    }
+  ]
+}
