@@ -2,9 +2,6 @@
   "functions": {
     "api/compare.py": {
       "runtime": "python3.9"
-    },
-    "api/send_otp.py": {
-      "runtime": "python3.9"
     }
   }
 }
