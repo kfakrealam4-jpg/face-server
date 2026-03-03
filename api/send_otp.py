@@ -1,7 +1,7 @@
 import json
+import urllib.request
 
 def handler(request):
-    # CORS headers
     headers = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'POST, OPTIONS',
@@ -10,15 +10,12 @@ def handler(request):
     }
     
     if request.method == 'OPTIONS':
-        return {'statusCode': 200, 'headers': headers, 'body': ''}
+        return {'statusCode': 200, 'headers': headers, 'body': '{}'}
     
     try:
-        import urllib.request
-        import urllib.parse
-        
         body = json.loads(request.body)
-        mobile = body.get('mobile', '')
-        otp = body.get('otp', '')
+        mobile = str(body.get('mobile', '')).strip()
+        otp = str(body.get('otp', '')).strip()
         
         if not mobile or not otp:
             return {
@@ -27,13 +24,14 @@ def handler(request):
                 'body': json.dumps({'success': False, 'error': 'mobile and otp required'})
             }
         
-        # Fast2SMS API
         API_KEY = 'c7vqZWIAUo6tHSYJXLe83OlmzPKxg52dTs0ipay9GkFEhwrQMNh8m5FlMHfSsqtETC4nQIGjJV9DwW7z'
-        
         url = f'https://www.fast2sms.com/dev/bulkV2?authorization={API_KEY}&variables_values={otp}&route=otp&numbers={mobile}'
         
-        req = urllib.request.Request(url, headers={'cache-control': 'no-cache'})
-        with urllib.request.urlopen(req, timeout=10) as resp:
+        req = urllib.request.Request(
+            url,
+            headers={'cache-control': 'no-cache', 'User-Agent': 'Mozilla/5.0'}
+        )
+        with urllib.request.urlopen(req, timeout=15) as resp:
             result = json.loads(resp.read().decode())
         
         return {
@@ -44,7 +42,7 @@ def handler(request):
         
     except Exception as e:
         return {
-            'statusCode': 500,
+            'statusCode': 200,
             'headers': headers,
             'body': json.dumps({'success': False, 'error': str(e)})
-        }
+            }
