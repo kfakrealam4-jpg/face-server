@@ -39,7 +39,7 @@ class handler(BaseHTTPRequestHandler):
             }).encode('utf-8')
 
             req = urllib.request.Request(
-                'https://api-us.faceplusplus.com/facepp/v3/compare',
+                'https://api-cn.faceplusplus.com/facepp/v3/compare',
                 data=post_data,
                 method='POST'
             )
